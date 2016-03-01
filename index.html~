@@ -1,0 +1,157 @@
+<html>
+	<head>
+		<title>AssignMent For HTML,CSS,SASS,Ajax,JQuery</title>
+		<script src="jquery-2.2.0.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+					var imgArray = ["images/1.jpg","images/2.jpg","images/3.jpg","images/4.jpg","images/5.jpg","images/6.jpg","images/7.jpg","images/8.jpg","images/9.jpg","images/10.jpg",];
+					var imgarrLen = imgArray.length;
+					var index = 0;
+					var runImg = function(){
+						$("#changeMe").prop("src",imgArray[index]);
+						index+=1;
+						setTimeout(runImg,1000);
+						if(index == 9){ index = 0;}
+					}
+					runImg();
+
+					  $("#show").click(function(){
+				        $.post("http://localhost:9000/student/all",function(data, status){
+				            function drawTable(data) {
+							    for (var i = 0; i < data.length; i++) {
+							        drawRow(data[i]);
+							    }
+							}
+							function drawRow(rowData) {
+							    var row = $("<tr />")
+							    $("#studentTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+							    row.append($("<td>" + rowData.id + "</td>"));
+							    row.append($("<td>" + rowData.name + "</td>"));
+							    row.append($("<td>" + rowData.email + "</td>"));
+							}
+							drawTable(data);
+				       		 });
+				   		 });
+						$("#get").click(function(){alert("hey"+$("#gid").val())
+							$.get("http://localhost:9000/student/"+$("#gid").val(),function(data, status){
+								alert("dd"+data.id) ;$("#gname").val(data.name);$("#gemail").val(data.email);		});
+						});
+
+					  $("#save").click(function(){
+					  	var data = {"id":parseInt($("#id").val()),"name":$("#name").val(),"email":$("#email").val()};
+					  	 $.ajax({
+              url: "http://localhost:9000/student/save",
+              type: "POST",
+              data: JSON.stringify(data),
+              contentType: "application/json",
+              dataType: "json",
+              success: function(data, status){
+                 alert(data+" ; "+status)
+              }
+            });
+					  });
+			 });
+			
+		</script>
+		<style type="text/css">
+
+			table, td, th {
+					margin-left: 5px;
+				    border: 1px solid black;
+				    height: 35px;
+				    text-align: center;
+				}
+
+				table {
+				    border-collapse: collapse;
+				    width: 100%;
+				}
+
+				th {
+				    height: 50px;
+				}
+
+			#header {
+			    background-color:#000000;
+			    margin: 0%;
+			    color:white;
+			    text-align:center;
+			    height: 15%;
+			}
+			#imageSlide {
+			    background-color:#D9E1EC;
+			    color:white;
+			    margin-left: 8%;
+			    margin-right: 8%;
+			   	height:25%	 
+			}
+			#middle {
+				background-color: #D9E1EC;
+				 margin-left: 5%;
+			    margin-right: 5%;
+			    width: 90%;
+			    height: 55%;
+			}
+			#right {
+				background-color: #EBEBEB;
+				width: 55%;
+				text-align: center;
+				float: right;
+				height: 100%;
+			}
+			#left {
+				background-color: #EBEBEB;
+				width: 40%;
+				height: 100%;
+				text-align: center;
+				float:left;
+			}
+				
+		</style>		
+	</head>
+
+	<body style="margin:0%;background-color: #EBEBEB">
+		<div id="header">
+			<h1>Akash Sethi</h1>
+			<h2><i><u>You can Save, Get and View All Student Data using Ajax Calls</u></i></h2>
+		</div>
+		<br>
+		<div id="imageSlide" class="changeBG">
+			<img id="changeMe" src="images/1.jpg" style="width:100%;height:100%"><br><br>
+				<center>
+				<input type="text" required="required" id="gid" style="height: 40px;" placeholder="ID">
+				<input type="button" id="get" value="Get Student" style="height: 45px;font-size: 25px"></input>
+				<input type="text" required="required" id="gname" style="height: 40px;" placeholder="Name">
+				<input type="text" required="required" id="gemail" style="height: 40px;" placeholder="Email">
+				<center>>
+		</div>
+		<br><br><br>
+		<div id="middle">
+			<div id="right">
+					<h1><u>View All Data With Post Call</u>
+					 <input type="button" id="show" value="Show List" style="height: 40px;font-size: 20px"></input></h1>
+				<table id="studentTable">
+					<tr>
+						<th>Student ID</th>
+						<th>Student Name</th>
+						<th>Student Email</th>
+					</tr>
+				</table>
+			</div>
+			<div id="left">
+			<h1><u>Get Student Details Here</u></h1>
+			<input type="text" required="required" id="id" style="height: 40px;" placeholder="ID">
+				<br><br>
+			
+				<input type="text" required="required" id="name" style="height: 40px;" placeholder="Name">
+				<br><br>
+				<input type="text" required="required" id="email" style="height: 40px;" placeholder="Email">
+				<br><br>
+				<input type="button" id="save" value="Save Student" style="height: 45px;font-size: 30px"></input>
+			<br><br>
+				
+			</div>
+		</div>
+	</body>
+</html>
